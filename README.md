@@ -1,6 +1,9 @@
 # DDL_MANAGER
 基于MYSQL建立的ddl管理器。支持自然语言建立ddl条目。
 
+## 部署
+- 在info_generator.py中填写相关信息并运行程序
+
 ## 功能
 
 - 管理ddl
