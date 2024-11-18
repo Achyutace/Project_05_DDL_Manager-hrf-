@@ -18,8 +18,12 @@ def add(conn, fw, sw):
     # 添加DDL记录
     if fw == "ADD" and (sw == "DDL" or sw == "DDLS"):
         print("QUERY Ok, Now adding:[name] [yields] [deadline] [importance] [difficulty] [estimate]")
-        data = input().split()
-        name, yields, deadline, importance, difficulty, estimate = data
+        try:
+            data = input().split()
+            name, yields, deadline, importance, difficulty, estimate = data
+        except:
+            print("Invalid input.")
+            return
         sql_com = """
         INSERT INTO ddl1(name, yields, deadline, importance, difficulty, estimate)
         VALUES(%s, %s, %s, %s, %s, %s)

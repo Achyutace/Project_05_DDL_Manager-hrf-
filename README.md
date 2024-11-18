@@ -10,40 +10,22 @@
 
 ## 使用方法
 
-### SHOW
+### ADD
+使用`ADD`命令来添加YIELD或DDL。你需要指定ADD作用的对象。
 
+### ADJUST
+使用`ADJUST`命令来调整DDL。
+
+### DELETE
+使用`DELETE`命令来删除DDL或YIELD。你需要指定DELETE作用的对象。
+
+### SHOW
 使用`SHOW`命令来查询DDL1表中的数据。你需要指定一个排序的字段和一个排序的方向。
 
-#### 语法
-
-```
-SHOW [字段] [排序方向]
-```
-
-#### 参数
-
-- **字段**：可以是`DEADLINE`、`IMPORTANCE`、`DIFFICULTY`、`TIME`或`GROUP`。
-- **排序方向**：可以是`ASC`（升序）或`DESC`（降序）。
-
-#### 示例
-
-- 显示DDL1表中按截止日期升序排列的数据：
-  ```
-  SHOW DEADLINE ASC
-  ```
-
-- 显示DDL1表中按重要性降序排列的数据：
-  ```
-  SHOW IMPORTANCE DESC
-  ```
-
-- 显示DDL1表中按估计时间分组，并按总时间降序排列的数据：
-  ```
-  SHOW GROUP DESC
-  ```
+### QUERY
+使用`QUERY`命令来查询某个YIELD或DDL的情况。你需要指定QUERY作用的对象。
 
 ### HELP
-
 如果你不确定如何使用任何命令，可以使用`HELP`命令获取帮助。
 
 

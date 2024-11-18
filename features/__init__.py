@@ -7,6 +7,7 @@ from mysql.connector import Error
 from .query import query
 from .add import add
 from .adjust import adjust
+from .delete import delete
 from .show import process_command_show
 from .utils import assert_command_format, print_help
 

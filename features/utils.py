@@ -1,6 +1,7 @@
 def print_help():
     print("Available commands:")
     print("  ADD YIELD/DDL")
+    print("  ADJUST DDL")
     print("  QUERY YIELD/DDLS/ALL")
     print("  DELETE YIELD/DDL")
     print("  SHOW DEADLINE ASC/DESC")
@@ -25,7 +26,7 @@ def assert_command_format(*args):
         }
     }
     
-    if args[0] == "HELP" :
+    if args[0] in {"HELP"}:
         assert len(args)==1, "Invalid command."
     # 至少需要两个参数（命令和子命令）
     assert len(args) >= 2, "Not enough arguments provided."
