@@ -3,7 +3,10 @@ import os
 import mysql.connector
 from mysql.connector import Error
 from tabulate import tabulate
-
+from features.utils import *
+from features.show import process_command_show
+from features.adjust import adjust
+from features.add import add
 """
 config = {
     host: localhost
@@ -97,16 +100,8 @@ if conn:
     except Error as e:
         print("Error007: Failed to create table", e)
 
-def print_help():
-    print("Available commands:")
-    print("  ADD YIELD [name]")
-    print("  ADD DDL [name] [yields] [deadline] [importance] [difficulty] [estimate]")
-    print("  QUERY YIELD")
-    print("  QUERY DDLS")
-    print("  QUERY ALL")
-    print("  DELETE YIELD [name]")
-    print("  DELETE DDL [id]")
-    print(" DDL [characteristic] [DESC/ASC]")
+
+
 
 def run():
     command = input()
@@ -114,51 +109,21 @@ def run():
 
     if kw[0] == "HELP":
         print_help()
-
-    if len(kw) == 1:
-        print("Error001: You have an error in your command syntax; Try to insert again or use 'HELP' for assistance.")
+    
+    # check whether args is valid
+    try:
+        assert_command_format(kw)
+    except AssertionError as e:
+        print(e)
 
     if len(kw) == 2:
         fw,sw = kw
 
-        if fw == "ADJUST" and (sw == "DDL" or sw == "DDLS"):
-            print("QUERY Ok, Now adjusting:[id] [new_deadline]")
-            ans = input()
-            id = ans.split()[0]
-            nd = ans.split()[1]
-            sql_com = "UPDATE ddl1 SET deadline = %s WHERE abs_id = %s"
-            try:
-                cursor = conn.cursor(buffered=True)
-                cursor.execute(sql_com,(nd,id))
-                conn.commit()
-                print("ADJUST OK")
-            except Error as e:
-                print("Error101: Failed to Adjust ddl: ", e)
+        if fw == "ADJUST":
+            adjust(conn)
 
-        if fw == "ADD" and (sw == "YIELD" or sw == "YIELDS") :
-            print("QUERY Ok, Now adding:[name]")
-            name = input()
-            sql_com = "INSERT INTO YIELDS1(name) VALUE(%s)"
-            try:
-                cursor = conn.cursor(buffered=True)
-                cursor.execute(sql_com, (name,))
-                conn.commit()
-                print("YIELD added successfully")
-            except Error as e:
-                print("Error101: Failed to insert YIELD: ", e)
-
-        if fw == "ADD" and (sw == "DDL" or sw == "DDLS"):
-            print("QUERY Ok, Now adding:[name] [yields] [deadline] [importance] [difficulty] [estimate]")
-            data = input().split()
-            name,yields,deadline,importance,difficulty,estimate = data
-            sql_com = "INSERT INTO ddl1(name,yields,deadline,importance,difficulty,estimate) VALUES(%s,%s,%s,%s,%s,%s)"
-            try:
-                cursor = conn.cursor(buffered=True)
-                cursor.execute(sql_com, (name, yields, deadline, importance,difficulty,estimate))
-                conn.commit()
-                print("DDL added successfully")
-            except Error as e:
-                print("Error102: Failed to insert DDL: ", e)
+        if fw == "ADD" :
+            add(conn,fw,sw)
 
         if fw == "QUERY":
             if fw == "QUERY" and (sw == "YIELD" or sw == "YIELDS"):
@@ -206,45 +171,7 @@ def run():
                     print("Error 202: Failed to delete: ", e)
 
     if len(kw) == 3:
-        fw,mw,lw = kw
-        if fw != "SHOW":
-            print("hrfsb.Error001: You have an error in your command syntax; Try to insert again or use 'HELP' for assistance.")
-        else:
-            if mw == "DEADLINE" and lw == "ASC":
-                sql_com = "SELECT * FROM ddl1 ORDER BY deadline ASC"
-            if mw == "DEADLINE" and lw == "DESC":
-                sql_com = "SELECT * FROM ddl1 ORDER BY deadline DESC"
-            if mw == "IMPORTANCE" and lw == "DESC":
-                sql_com = "SELECT * FROM ddl1 ORDER BY importance DESC"
-            if mw == "IMPORTANCE" and lw == "ASC":
-                sql_com = "SELECT * FROM ddl1 ORDER BY importance ASC"
-            if mw == "DIFFICULTY" and lw == "DESC":
-                sql_com = "SELECT * FROM ddl1 ORDER BY difficulty DESC"
-            if mw == "DIFFICULTY" and lw == "ASC":
-                sql_com = "SELECT * FROM ddl1 ORDER BY importance ASC"
-            if mw == "TIME" and lw == "DESC":
-                sql_com = "SELECT * FROM ddl1 ORDER BY estimate DESC"
-            if mw == "TIME" and lw == "ASC":
-                sql_com = "SELECT * FROM ddl1 ORDER BY estimate ASC"
-            if mw == "GROUP" and lw == "DESC":
-                sql_com = "SELECT yields AS yield, SUM(estimate) AS total_time FROM ddl1 GROUP BY yield ORDER BY total_time DESC"
-            if mw == "GROUP" and lw == "ASC":
-                sql_com = "SELECT yields AS yield, SUM(estimate) AS total_time FROM ddl1 GROUP BY yield ORDER BY total_time ASC"
-            try:
-                cursor = conn.cursor(buffered=True)
-                cursor.execute(sql_com)
-                rows = cursor.fetchall()
-                column_names = [i[0] for i in cursor.description]
-                # 使用tabulate来格式化输出
-                print(tabulate(rows, headers=column_names, tablefmt="grid"))
-            except Error as e:
-                print("Error301 : Failed to query DDL: ", e)
-            finally:
-                if cursor:
-                    cursor.close()
-
-    if len(kw) >=4:
-        print("Error001: You have an error in your command syntax; Try to insert again or use 'HELP' for assistance.")
+        process_command_show(conn, kw)
 
 def main():
     while True:

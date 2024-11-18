@@ -1,6 +1,6 @@
 LLM:
   api_base: https://api.deepseek.com
-  api_key: tem
+  api_key: sk-c853f9a55e014ad8ba2f6df21817ac13
   moudle: deepseek-chat
   name: ddl_manager
 mysql:
