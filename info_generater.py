@@ -1,10 +1,11 @@
 import yaml
 
 # 配置信息
+key = input("请输入你的api_key:")
 config = {
     "LLM":{
         "api_base":"https://api.deepseek.com",
-        "api_key":"sk-c853f9a55e014ad8ba2f6df21817ac13",
+        "api_key":key,
         "name":"ddl_manager",
         "moudle":"deepseek-chat"
     },
