@@ -1,0 +1,10 @@
+LLM:
+  api_base: https://api.deepseek.com
+  api_key: tem
+  moudle: deepseek-chat
+  name: ddl_manager
+mysql:
+  database: ddl_manager
+  host: localhost
+  password: AcCe_142857_
+  user: root
