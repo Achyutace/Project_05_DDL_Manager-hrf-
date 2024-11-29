@@ -4,6 +4,8 @@ import yaml
 import mysql.connector
 from mysql.connector import Error
 
+from .load_config import *
+
 from .query import query
 from .add import add
 from .adjust import adjust
@@ -12,16 +14,7 @@ from .show import process_command_show
 from .utils import assert_command_format, print_help
 
 
-config_path = "config/application.yaml"
 
-# os.chdir(os.path.dirname(os.getcwd()))
-print(os.getcwd())
-def load_config(filename=config_path):
-    with open(filename, 'r') as file:
-        return yaml.safe_load(file)
-
-config = load_config()
-mysql_config = config.get('mysql')
 # 全局变量来存储数据库连接和游标
 conn = None
 cursor = None

@@ -33,6 +33,7 @@ def main():
         run()
 
 if __name__ == "__main__":
+    print(mysql_config)
     main()
 
 # 确保在程序退出时关闭数据库连接
